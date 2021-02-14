@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 
-from std_srvs.srv import Trigger, TriggerResponse
+from std_srvs.srv import Trigger, TriggerResponse, Empty
 from std_msgs.msg import Bool
 from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import TransformStamped
@@ -318,6 +318,17 @@ class SpotROS():
             self.navigate_as.set_succeeded(NavigateToResult(resp[0], resp[1]))
         else:
             self.navigate_as.set_aborted(NavigateToResult(resp[0], resp[1]))
+            
+    def handle_stairs_on(self):
+        """Turn on stair mode"""
+        #spot_command_pb2.MobilityParams(
+        #        locomotion_hint=spot_command_pb2.HINT_JOG, stair_hint=0)
+        self.spot_wrapper.set_mobility_params(stair_hint=True)
+
+    def handle_stairs_off(self):
+        """Turn off stair mode"""
+        self.spot_wrapper.set_mobility_params(stair_hint=False)
+
 
     def shutdown(self):
         rospy.loginfo("Shutting down ROS driver for Spot")
@@ -414,6 +425,10 @@ class SpotROS():
             rospy.Service("estop/gentle", Trigger, self.handle_estop_soft)
 
             rospy.Service("list_graph", ListGraph, self.handle_list_graph)
+
+            rospy.Service("stairs_mode_on", Empty, self.handle_stairs_on)
+            rospy.Service("stairs_mode_off", Empty, self.handle_stairs_off)
+
 
             self.navigate_as = actionlib.SimpleActionServer('navigate_to', NavigateToAction,
                                                             execute_cb = self.handle_navigate_to,
