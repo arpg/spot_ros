@@ -263,32 +263,6 @@
         <limit effort="1000" velocity="1000.00" lower="-2.7929" upper="-0.257725" />
     </joint>
 
- <link name="imu_viz_link"/>
-   <joint name="imu-viz-joint" type="fixed">
-     <parent link="imu_viz_link"/>
-     <child link="imu_link"/>
-     <!-- <origin xyz="0.00355 0.07566 0.03168" rpy="3.1415926535 0.0 -1.57079632679" /> custom machined plate, ouster out front -->
-     <origin xyz="0 0 0" rpy="3.1415926535 0.0 1.57079632679"/> <!-- precision machined plate, ouster out back, no heat sink -->
-   </joint>
- 
-   <link name="imu_link"/>
-   <joint name="imu-joint" type="fixed">
-     <parent link="base_link"/>
-     <child link="imu_viz_link"/>
-     <origin xyz="0.34842 0 .29575" rpy="0.0 0.0 0.0" />
-   </joint>
- 
-   <link name="os_sensor"/>
-   <joint name="ouster-joint" type="fixed">
-     <parent link="imu_viz_link"/>
-     <child link="os_sensor"/>
-     <!-- <origin xyz="-0.00355 -0.07566 -0.03168" rpy="3.1415926535 0 -1.57079632679"/> custom machined plate, ouster out front -->
-     <origin xyz="-0.07517 -0.00330 0.0505" rpy="0 0 0"/> <!-- precision machined plate, ouster out back, with heat sink --> <!-- z = 0.02268 for old firmware -->
-    </joint>
-
-    <!-- Standard accessories. -->
-    <xacro:include filename="$(find spot_description)/urdf/accessories.urdf.xacro" />
-
     <!-- Optional custom includes. -->
     <xacro:include filename="$(optenv SPOT_URDF_EXTRAS empty.urdf)" />
 </robot>

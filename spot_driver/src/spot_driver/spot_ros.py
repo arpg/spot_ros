@@ -1,7 +1,7 @@
 import rospy
 
-from std_srvs.srv import Trigger, TriggerResponse, SetBool, SetBoolResponse
-from std_msgs.msg import Bool
+from std_srvs.srv import Trigger, TriggerResponse, Empty
+from std_msgs.msg import Bool, Empty
 from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import TransformStamped
 from sensor_msgs.msg import Image, CameraInfo
@@ -412,6 +412,21 @@ class SpotROS():
             self.navigate_as.set_succeeded(NavigateToResult(resp[0], resp[1]))
         else:
             self.navigate_as.set_aborted(NavigateToResult(resp[0], resp[1]))
+            
+    def handle_stairs_on(self, req):
+        """Turn on stair mode"""
+        #spot_command_pb2.MobilityParams(
+        #        locomotion_hint=spot_command_pb2.HINT_JOG, stair_hint=0)
+        self.spot_wrapper.set_mobility_params(stair_hint=1)
+        rospy.loginfo("Stair Mode On")
+        return [True, "stair_mode_on"]
+
+    def handle_stairs_off(self, req):
+        """Turn off stair mode"""
+        self.spot_wrapper.set_mobility_params(stair_hint=0)
+        rospy.loginfo("Stair Mode Off")
+        return [True, "stair_mode_off"]
+
 
     def populate_camera_static_transforms(self, image_data):
         """Check data received from one of the image tasks and use the transform snapshot to extract the camera frame
@@ -551,6 +566,10 @@ class SpotROS():
             rospy.Service("clear_behavior_fault", ClearBehaviorFault, self.handle_clear_bahavior_fault)
 
             rospy.Service("list_graph", ListGraph, self.handle_list_graph)
+
+            rospy.Service("stairs_mode_on", Trigger, self.handle_stairs_on)
+            rospy.Service("stairs_mode_off", Trigger, self.handle_stairs_off)
+
 
             self.navigate_as = actionlib.SimpleActionServer('navigate_to', NavigateToAction,
                                                             execute_cb = self.handle_navigate_to,

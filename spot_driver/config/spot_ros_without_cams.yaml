@@ -1,10 +1,10 @@
 rates:
-  robot_state: 1.0
+  robot_state: 20.0
   metrics: 0.04
   lease: 1.0
-  front_image: 10.00
-  side_image: 10.00
-  rear_image: 10.00
+  front_image: 0.00
+  side_image: 0.00
+  rear_image: 0.00
 auto_claim: False
 auto_power_on: False
 auto_stand: False
