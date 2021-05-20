@@ -1,5 +1,5 @@
 <launch>
-	<arg name="enable_realsenses"		default="false"/>
+  <arg name="enable_realsenses"		default="false"/>
 
   <arg name="username" default="dummyusername" />
   <arg name="password" default="dummypassword" />
@@ -8,9 +8,9 @@
   <include file="$(find spot_description)/launch/description.launch" />
   <include file="$(find spot_driver)/launch/control.launch" />
 
-  <node pkg="spot_driver" type="spot_ros.py" name="spot_ros"  ns="spot" output="screen">
+  <node pkg="spot_driver" type="spot_ros" name="spot_ros"  ns="spot" output="screen">
     <rosparam file="$(find spot_driver)/config/spot_ros_without_cams.yaml" command="load" unless="$(arg enable_realsenses)"/>
-		<rosparam file="$(find spot_driver)/config/spot_ros_with_cams.yaml"    command="load" if="$(arg enable_realsenses)"/>
+    <rosparam file="$(find spot_driver)/config/spot_ros_with_cams.yaml"    command="load" if="$(arg enable_realsenses)"/>
     <param name="username" value="$(arg username)" />
     <param name="password" value="$(arg password)" />
     <param name="hostname" value="$(arg hostname)" />
