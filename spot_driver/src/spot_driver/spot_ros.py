@@ -1,6 +1,10 @@
+#!/usr/bin/env python3
+import sys
+py3_path = [path for path in sys.path if "python3" in path]
+sys.path.insert(0, py3_path[0])
 import rospy
 
-from std_srvs.srv import Trigger, TriggerResponse, Empty
+from std_srvs.srv import Trigger, TriggerResponse, Empty, SetBool, SetBoolResponse
 from std_msgs.msg import Bool, Empty
 from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import TransformStamped
@@ -16,6 +20,8 @@ from bosdyn.client import math_helpers
 import actionlib
 import functools
 import bosdyn.geometry
+
+import pkg_resources
 import tf2_ros
 
 from spot_msgs.msg import Metrics
